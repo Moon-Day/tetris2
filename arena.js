@@ -1,6 +1,6 @@
-import GameManager from "./game-manager.js";
-import Square from "./square.js";
-import TetrominoFactory from "./tetromino-factory.js";
+import GameManager from './game-manager.js';
+import Square from './square.js';
+import TetrominoFactory from './tetromino-factory.js';
 
 export default class Arena {
     constructor(){
@@ -14,7 +14,7 @@ export default class Arena {
         }
         this._squares = [...Array(this._columns)].map(() => [...Array(this._lines)]);
 
-        this.currentPiece = new TetrominoFactory().getTetromino().setPosition(1, 3);
+        this.currentPiece = new TetrominoFactory().getTetromino().setPosition(0, 3);
         this._currentPieceFallInterval = setInterval(this._currentPieceFall, 1000);
     }
 
@@ -26,7 +26,9 @@ export default class Arena {
     }
 
     isOutsideBoundaries(i, j, piece){
-        return (piece.position.y + j) >= this._lines;
+        return (piece.position.y + j) >= this._lines
+            || (piece.position.x + i) >= this._columns
+            || (piece.position.x + i) < 0;
     }
 
     conflicts(i, j, piece){

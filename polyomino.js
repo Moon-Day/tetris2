@@ -1,5 +1,5 @@
-import GameManager from "./game-manager.js";
-import Square from "./square.js";
+import GameManager from './game-manager.js';
+import Square from './square.js';
 
 export default class Polyomino{
 
@@ -60,20 +60,63 @@ export default class Polyomino{
         }
     }
 
-    tryMoveDown(){
-        let copy = this.clone();
-        copy.position.y++;
-
+    _validate(copy){
         for(let i = 0; i < this._squaresCount; i++){
             for(let j = 0; j < this._squaresCount; j++){
-                if(this._squares[i][j] && (GameManager.arena.isOutsideBoundaries(i, j, copy) || GameManager.arena.conflicts(i, j, copy))) {
+                if(copy._squares[i][j] && (GameManager.arena.isOutsideBoundaries(i, j, copy) || GameManager.arena.conflicts(i, j, copy))) {
                     return false;
                 }
             }
         }
+        return true;
+    }
 
-        this.position.y++;
+    _tryMove(moveFn){
+        let copy = this.clone();
+        moveFn(copy);
+
+        if(!this._validate(copy)){
+            return false;
+        }
+        moveFn(this);
+
+        return true;    
+    }
+
+    tryMoveLeft(){
+        return this._tryMove(obj => obj.position.x--);
+    
+    }
+
+    tryRotateAntiClockwise(){
+        let copy = this.clone();
+
+            for(let i = 0; i < this._squaresCount; i++){
+                for(let j = 0; j < this._squaresCount; j++){
+                    copy._squares[i][j] = this._squares[this._squaresCount - j - 1][i];
+            }
+        }
+    
+        if(!this._validate(copy)){
+            return false;
+        }
+
+        for(let i = 0; i < this._squaresCount; i++){
+                for(let j = 0; j < this._squaresCount; j++){
+                    this._squares[i][j] = copy._squares[i][j];
+            }
+        }
 
         return true;     
+    }
+      
+    tryMoveRight(){
+        return this._tryMove(obj => obj.position.x++);
+        
+    }
+
+    tryMoveDown(){
+        return this._tryMove(obj => obj.position.y++);
+        
     }
 }
