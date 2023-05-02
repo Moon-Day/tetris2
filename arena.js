@@ -14,14 +14,22 @@ export default class Arena {
         }
         this._squares = [...Array(this._columns)].map(() => [...Array(this._lines)]);
 
-        this.currentPiece = new TetrominoFactory().getTetromino();
+        this.currentPiece = new TetrominoFactory().getTetromino().setPosition(1, 3);
+        this._currentPieceFallInterval = setInterval(this._currentPieceFall, 1000);
+    }
+
+    _currentPieceFall(){
+        // piece can fall?
+        
+        // position.y ++
+        // set position
     }
 
     draw(){
         this._drawBorder();
         this._drawSquares();
         this._drawGrid();
-        this.currentPiece.draw(3, 6);
+        this.currentPiece.draw();
     }
 
     _drawBorder(){
