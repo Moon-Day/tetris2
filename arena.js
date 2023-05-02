@@ -19,10 +19,22 @@ export default class Arena {
     }
 
     _currentPieceFall(){
-        // piece can fall?
-        
-        // position.y ++
-        // set position
+        if(!GameManager.arena.currentPiece.tryMoveDown()){
+            GameManager.arena.currentPiece.mergeToArena();
+            GameManager.arena.currentPiece = new TetrominoFactory().getTetromino().setPosition(1, 3);
+        }
+    }
+
+    isOutsideBoundaries(i, j, piece){
+        return (piece.position.y + j) >= this._lines;
+    }
+
+    conflicts(i, j, piece){
+        return this._squares[piece.position.x + i][piece.position.y + j];
+    }
+
+    setSquare(i, j, square){
+        this._squares[i][j] = square;
     }
 
     draw(){
