@@ -1,5 +1,6 @@
-import GameManager from './game-manager.js';
-import Square from './square.js';
+import GameManager from "./game-manager.js";
+import Square from "./square.js";
+import TetrominoFactory from "./tetromino-factory.js";
 
 export default class Arena {
     constructor(){
@@ -12,13 +13,15 @@ export default class Arena {
             left: (GameManager.config.width - this._width) / 2
         }
         this._squares = [...Array(this._columns)].map(() => [...Array(this._lines)]);
-        this._squares [2][6] = new Square("#bb0000");
+
+        this.currentPiece = new TetrominoFactory().getTetromino();
     }
 
     draw(){
         this._drawBorder();
         this._drawSquares();
         this._drawGrid();
+        this.currentPiece.draw(3, 6);
     }
 
     _drawBorder(){
